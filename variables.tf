@@ -78,6 +78,35 @@ variable "sku_tier" {
   }
 }
 
+#variable "automatic_channel_upgrade" {
+#  description = "In addition to manually upgrading a cluster, you can set an auto-upgrade channel on your cluster. Read doc [here](https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster#set-auto-upgrade-channel)."
+#  type        = string
+#  default     = null
+#
+#  validation {
+#    condition     = contains(["patch", "rapid", "node-image", "stable"], lower(var.automatic_channel_upgrade))
+#    error_message = "Possible values are \"none\", \"patch\", \"rapid\", \"node-image\" and \"stable\"."
+#  }
+#}
+
+
+variable "automatic_channel_upgrade" {
+  description = "In addition to manually upgrading a cluster, you can set an auto-upgrade channel on your cluster. Read doc [here](https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster#set-auto-upgrade-channel)."
+  type        = string
+  default     = null
+
+  validation {
+    condition = (
+      (var.automatic_channel_upgrade == null) ||
+      (var.automatic_channel_upgrade == "patch") ||
+      (var.automatic_channel_upgrade == "rapid") ||
+      (var.automatic_channel_upgrade == "node-image") ||
+      (var.automatic_channel_upgrade == "stable")
+    )
+    error_message = "Automatic channel upgrade must be patch, rapid, node-image or stable."
+  }
+}
+
 variable "kubernetes_version" {
   description = "kubernetes version"
   type        = string
