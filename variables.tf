@@ -323,19 +323,6 @@ variable "load_balancer_origin_groups" {
 #  }
 #}
 
-dynamic "origin_group" {
-  for_each = var.load_balancer_origin_groups
-  content {
-    name = origin_group.key
-    dynamic "origin" {
-      for_each = origin_group.value.origins
-      content {
-        hostname = origin.value.hostname
-      }
-    }
-  }
-}
-
 variable "rbac" {
   description = "role based access control settings"
   type = object({
