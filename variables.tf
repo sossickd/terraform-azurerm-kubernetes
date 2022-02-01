@@ -283,11 +283,26 @@ variable "maintenance_window" {
       hours = list(number)
     })
     not_allowed = object({
-     end = string
      start = string
+     end = string
     })
   })
-  default = null #{
+  default = null
+
+  validation {
+    condition = (
+      var.maintenance_window == null ? true :
+      ((var.maintenance_window.day != null) &&
+        (var.maintenance_window.day != "") &&
+        (var.maintenance_window.hours != null) &&
+        (var.maintenance_window.hours != "") &&
+        (var.maintenance_window.start != null) &&
+        (var.maintenance_window.start != "") &&
+        (var.maintenance_window.end != null) &&
+      (var.maintenance_window.end != ""))
+    )
+    error_message = "Windows profile requires both admin_username and admin_password."
+  }
 }
 
 variable "rbac" {
