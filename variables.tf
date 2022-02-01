@@ -78,18 +78,6 @@ variable "sku_tier" {
   }
 }
 
-#variable "automatic_channel_upgrade" {
-#  description = "In addition to manually upgrading a cluster, you can set an auto-upgrade channel on your cluster. Read doc [here](https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster#set-auto-upgrade-channel)."
-#  type        = string
-#  default     = null
-#
-#  validation {
-#    condition     = contains(["patch", "rapid", "node-image", "stable"], lower(var.automatic_channel_upgrade))
-#    error_message = "Possible values are \"none\", \"patch\", \"rapid\", \"node-image\" and \"stable\"."
-#  }
-#}
-
-
 variable "automatic_channel_upgrade" {
   description = "In addition to manually upgrading a cluster, you can set an auto-upgrade channel on your cluster. Read doc [here](https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster#set-auto-upgrade-channel)."
   type        = string
@@ -103,7 +91,7 @@ variable "automatic_channel_upgrade" {
       (var.automatic_channel_upgrade == "node-image") ||
       (var.automatic_channel_upgrade == "stable")
     )
-    error_message = "Automatic channel upgrade must be patch, rapid, node-image or stable."
+    error_message = "Automatic channel upgrade must be either patch, rapid, node-image or stable."
   }
 }
 
@@ -284,6 +272,46 @@ variable "windows_profile" {
       (var.windows_profile.admin_password != ""))
     )
     error_message = "Windows profile requires both admin_username and admin_password."
+  }
+}
+
+variable "maintenance_window_allowed" {
+  description = "Maintenance window not_allowed day/hours"
+  type = object({
+    day = string
+    hours = string
+  })
+  default = null
+
+  validation {
+    condition = (
+      var.maintenance_window_allowed == null ? true :
+      ((var.maintenance_window_allowed.day != null) &&
+        (var.maintenance_window_allowed.day != "") &&
+        (var.maintenance_window_allowed.hours != null) &&
+      (var.maintenance_window_allowed.hours != ""))
+    )
+    error_message = "Maintenance_window allowed block must contain day and hours"
+  }
+}
+
+variable "maintenance_window_not_allowed" {
+  description = "Maintenance window not_allowed start/end"
+  type = object({
+    start = string
+    end = string
+  })
+  default = null
+
+  validation {
+    condition = (
+      var.maintenance_window_not_allowed== null ? true :
+      ((var.maintenance_window_not_allowed.start != null) &&
+        (var.maintenance_window_not_allowed.start != "") &&
+        (var.maintenance_window_not_allowed.end != null) &&
+      (var.maintenance_window_not_allowed.end != ""))
+    )
+    error_message = "Maintenance_window not_allowed block must contain start and end"
   }
 }
 
