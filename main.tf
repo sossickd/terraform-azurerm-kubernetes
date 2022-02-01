@@ -145,8 +145,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
       dynamic "maintenance_window_allowed" {
         for_each = maintenance_window.value.maintenancewindowallowed
         content {
-          day = var.maintenance_window_allowed.day
-          hours = var.maintenance_window_allowed.hours
+          day = maintenance_window.value.day
+          hours = maintenance_window.value.hours
         }
       }
     }
