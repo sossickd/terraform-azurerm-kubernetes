@@ -277,7 +277,7 @@ variable "windows_profile" {
 
 variable "maintenance_window_allowed" {
   type = map(object({
-    origins = set(object({
+    maintenancewindowallowed = set(object({
       day = string
       hours = string
     }))
