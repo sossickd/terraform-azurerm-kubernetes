@@ -292,14 +292,14 @@ variable "maintenance_window" {
   validation {
     condition = (
       var.maintenance_window == null ? true :
-      ((var.maintenance_window.day != null) &&
-        (var.maintenance_window.day != "") &&
-        (var.maintenance_window.hours != null) &&
-        (var.maintenance_window.hours != "") &&
-        (var.maintenance_window.start != null) &&
-        (var.maintenance_window.start != "") &&
-        (var.maintenance_window.end != null) &&
-      (var.maintenance_window.end != ""))
+      ((var.maintenance_window.allowed.day != null) &&
+        (var.maintenance_window.allowed.day != "") &&
+        (var.maintenance_window.allowed.hours != null) &&
+        (var.maintenance_window.allowed.hours != "") &&
+        (var.maintenance_window.not_allowed.start != null) &&
+        (var.maintenance_window.not_allowed.start != "") &&
+        (var.maintenance_window.not_allowed.end != null) &&
+      (var.maintenance_window.not_allowed.end != ""))
     )
     error_message = "Windows profile requires both admin_username and admin_password."
   }
