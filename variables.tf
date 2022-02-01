@@ -275,66 +275,20 @@ variable "windows_profile" {
   }
 }
 
-variable "maintenance_window_allowed" {
-  type = map(object({
-    maintenancewindowallowed = set(object({
-      day = string
-      hours = string
-    }))
-  }))
-  default = null
 
-  validation {
-    condition = (
-      var.maintenance_window_allowed == null ? true :
-      ((var.maintenance_window_allowed.day != null) &&
-        (var.maintenance_window_allowed.day != "") &&
-        (var.maintenance_window_allowed.hours != null) &&
-      (var.maintenance_window_allowed.hours != ""))
-    )
-    error_message = "Maintenance_window allowed block must contain day and hours."
-  }  
+variable "maintenance_window" {
+  type = object({
+    allowed = object({
+      day   = string
+      hours = list(number)
+    })
+    not_allowed = object({
+     end = string
+     start = string
+    })
+  })
+  default = null #{
 }
-
-#ariable "maintenance_window_allowed" {
-# description = "Maintenance window not_allowed day/hours"
-# type = object({
-#   day = string
-#   hours = string
-# })
-# default = null
-#
-# validation {
-#   condition = (
-#     var.maintenance_window_allowed == null ? true :
-#     ((var.maintenance_window_allowed.day != null) &&
-#       (var.maintenance_window_allowed.day != "") &&
-#       (var.maintenance_window_allowed.hours != null) &&
-#     (var.maintenance_window_allowed.hours != ""))
-#   )
-#   error_message = "Maintenance_window allowed block must contain day and hours."
-# }
-#
-#
-#variable "maintenance_window_not_allowed" {
-#  description = "Maintenance window not_allowed start/end"
-#  type = object({
-#    start = string
-#    end = string
-#  })
-#  default = null
-#
-#  validation {
-#    condition = (
-#      var.maintenance_window_not_allowed== null ? true :
-#      ((var.maintenance_window_not_allowed.start != null) &&
-#        (var.maintenance_window_not_allowed.start != "") &&
-#        (var.maintenance_window_not_allowed.end != null) &&
-#      (var.maintenance_window_not_allowed.end != ""))
-#    )
-#    error_message = "Maintenance_window not_allowed block must contain start and end."
-#  }
-#}
 
 variable "rbac" {
   description = "role based access control settings"

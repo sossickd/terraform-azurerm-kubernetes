@@ -102,56 +102,25 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  #dynamic "maintenance_window" {
-  #  for_each = var.maintenance_window_allowed ? [1] : [] || var.maintenance_window_not_allowed ? [1] : []
-  #  content {
-  #  name = maintenance_window.key
-#
-  #    dynamic "allowed" {
-  #      for_each = var.maintenance_window_allowed ? [1] : []
-  #      content {
-  #        day = var.maintenance_window_allowed.day
-  #        hours = var.maintenance_window_allowed.hours
-  #      }
-  #    }
-#
-  #    dynamic "not_allowed" {
-  #      for_each =var.maintenance_window_not_allowed ? [1] : []
-  #      content {
-  #        start = var.maintenance_window_not_allowed.start
-  #        end = var.maintenance_window_not_allowed.end
-  #      }
-  #    }   
-  #  }
-  #}
-
-#dynamic "origin_group" {
-#  for_each = var.load_balancer_origin_groups
-#  content {
-#    name = origin_group.key
-#    dynamic "origin" {
-#      for_each = origin_group.value.origins
-#      content {
-#        hostname = origin.value.hostname
-#      }
-#    }
-#  }
-#}
-
   dynamic "maintenance_window" {
-    for_each = var.maintenance_window_allowed ? [1] : []
-    content {
-      name = maintenance_window.key
-      dynamic "maintenance_window_allowed" {
-        for_each = maintenance_window.value.maintenancewindowallowed
-        content {
-          day = maintenance_window.value.day
-          hours = maintenance_window.value.hours
+      for_each = (var.maintenance_window == null ? [] : [1])
+      content {
+        dynamic "allowed" {
+          for_each = (lookup(var.maintenance_window, "allowed", null) == null ? [] : [1])
+          content {
+            day = var.maintenance_window.allowed.day
+            hours = var.maintenance_window.allowed.hours
+          }
+        }
+        dynamic "not_allowed" {
+          for_each = (lookup(var.maintenance_window, "not_allowed", null) == null ? [] : [1])
+          content {
+            end = var.maintenance_window.allowed.day
+            start = var.maintenance_window.allowed.hours
+          }
         }
       }
     }
-  }
-
   identity {
     type = var.identity_type
     user_assigned_identity_id = (var.identity_type == "SystemAssigned" ? null :
