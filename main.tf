@@ -125,6 +125,19 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #  }
   #}
 
+dynamic "origin_group" {
+  for_each = var.load_balancer_origin_groups
+  content {
+    name = origin_group.key
+    dynamic "origin" {
+      for_each = origin_group.value.origins
+      content {
+        hostname = origin.value.hostname
+      }
+    }
+  }
+}
+
   identity {
     type = var.identity_type
     user_assigned_identity_id = (var.identity_type == "SystemAssigned" ? null :
