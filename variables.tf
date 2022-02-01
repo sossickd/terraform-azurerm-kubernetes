@@ -275,33 +275,46 @@ variable "windows_profile" {
   }
 }
 
-variable "load_balancer_origin_groups" {
+variable "maintenance_window_allowed" {
   type = map(object({
     origins = set(object({
-      hostname = string
+      day = string
+      hours = string
     }))
   }))
+  default = null
+
+  validation {
+    condition = (
+      var.maintenance_window_allowed == null ? true :
+      ((var.maintenance_window_allowed.day != null) &&
+        (var.maintenance_window_allowed.day != "") &&
+        (var.maintenance_window_allowed.hours != null) &&
+      (var.maintenance_window_allowed.hours != ""))
+    )
+    error_message = "Maintenance_window allowed block must contain day and hours."
+  }  
 }
 
-#variable "maintenance_window_allowed" {
-#  description = "Maintenance window not_allowed day/hours"
-#  type = object({
-#    day = string
-#    hours = string
-#  })
-#  default = null
+#ariable "maintenance_window_allowed" {
+# description = "Maintenance window not_allowed day/hours"
+# type = object({
+#   day = string
+#   hours = string
+# })
+# default = null
 #
-#  validation {
-#    condition = (
-#      var.maintenance_window_allowed == null ? true :
-#      ((var.maintenance_window_allowed.day != null) &&
-#        (var.maintenance_window_allowed.day != "") &&
-#        (var.maintenance_window_allowed.hours != null) &&
-#      (var.maintenance_window_allowed.hours != ""))
-#    )
-#    error_message = "Maintenance_window allowed block must contain day and hours."
-#  }
-#}
+# validation {
+#   condition = (
+#     var.maintenance_window_allowed == null ? true :
+#     ((var.maintenance_window_allowed.day != null) &&
+#       (var.maintenance_window_allowed.day != "") &&
+#       (var.maintenance_window_allowed.hours != null) &&
+#     (var.maintenance_window_allowed.hours != ""))
+#   )
+#   error_message = "Maintenance_window allowed block must contain day and hours."
+# }
+#
 #
 #variable "maintenance_window_not_allowed" {
 #  description = "Maintenance window not_allowed start/end"

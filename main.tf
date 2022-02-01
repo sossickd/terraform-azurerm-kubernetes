@@ -125,18 +125,32 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #  }
   #}
 
-dynamic "origin_group" {
-  for_each = var.load_balancer_origin_groups
-  content {
-    name = origin_group.key
-    dynamic "origin" {
-      for_each = origin_group.value.origins
-      content {
-        hostname = origin.value.hostname
+#dynamic "origin_group" {
+#  for_each = var.load_balancer_origin_groups
+#  content {
+#    name = origin_group.key
+#    dynamic "origin" {
+#      for_each = origin_group.value.origins
+#      content {
+#        hostname = origin.value.hostname
+#      }
+#    }
+#  }
+#}
+
+  dynamic "maintenance_window" {
+    for_each = var.maintenance_window_allowed ? [1] : []
+    content {
+      name = maintenance_window.key
+      dynamic "maintenance_window_allowed" {
+        for_each = maintenance_window.value.maintenancewindowallowed
+        content {
+          day = var.maintenance_window_allowed.day
+          hours = var.maintenance_window_allowed.hours
+        }
       }
     }
   }
-}
 
   identity {
     type = var.identity_type
