@@ -104,8 +104,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   dynamic "maintenance_window" {
     for_each = var.maintenance_window_allowed ? [1] : [] || var.maintenance_window_not_allowed ? [1] : []
-    #content {
-    #name = maintenance_window.key
+    content {
+    name = maintenance_window.key
 
       dynamic "allowed" {
         for_each = var.maintenance_window_allowed ? [1] : []
@@ -122,7 +122,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
           end = var.maintenance_window_not_allowed.end
         }
       }   
-    #}
+    }
   }
 
   identity {
