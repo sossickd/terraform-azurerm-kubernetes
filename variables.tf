@@ -291,7 +291,7 @@ variable "maintenance_window_allowed" {
         (var.maintenance_window_allowed.hours != null) &&
       (var.maintenance_window_allowed.hours != ""))
     )
-    error_message = "Maintenance_window allowed block must contain day and hours"
+    error_message = "Maintenance_window allowed block must contain day and hours."
   }
 }
 
@@ -311,7 +311,7 @@ variable "maintenance_window_not_allowed" {
         (var.maintenance_window_not_allowed.end != null) &&
       (var.maintenance_window_not_allowed.end != ""))
     )
-    error_message = "Maintenance_window not_allowed block must contain start and end"
+    error_message = "Maintenance_window not_allowed block must contain start and end."
   }
 }
 
