@@ -292,10 +292,12 @@ variable "maintenance_window" {
   validation {
     condition = (
       var.maintenance_window == null ? true :
-      ((var.maintenance_window.allowed.day != null) &&
+      ((var.maintenance_window.allowed == null) ? true :
+        (var.maintenance_window.allowed.day != null) &&
         (var.maintenance_window.allowed.day != "") &&
         (var.maintenance_window.allowed.hours != null) &&
         (var.maintenance_window.allowed.hours != "") &&
+        (var.maintenance_window.not_allowed == null) ? true :
         (var.maintenance_window.not_allowed.start != null) &&
         (var.maintenance_window.not_allowed.start != "") &&
         (var.maintenance_window.not_allowed.end != null) &&
