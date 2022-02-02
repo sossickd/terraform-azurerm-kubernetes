@@ -281,15 +281,15 @@ variable "maintenance_window" {
   default = []
 
   validation {
-    condition = alltrue([
+    condition = alltrue(concat((length(var.maintenance_window) < 2 ? true : false), [
       for window in var.maintenance_window : (
         (can(window["allowed"]) ? can(window.allowed["day"]) : true) &&
         (can(window["allowed"]) ? can(window.allowed["hours"]) : true) &&
         (can(window["not_allowed"]) ? can(window.not_allowed["start"]) : true) &&
         (can(window["not_allowed"]) ? can(window.not_allowed["end"]) : true)
       )
-    ])
-    error_message = "Maintenence window is a list of objects containing allowed and not_allowed configurations."
+    ]))
+    error_message = "Maintenence window is a list of objects containing allowed and not_allowed configurations (currently only one maintenence window is supported)."
   }
 }
 
