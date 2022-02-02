@@ -19,9 +19,10 @@ locals {
 
   api_server_authorized_ip_ranges = (var.api_server_authorized_ip_ranges == null ? null : values(var.api_server_authorized_ip_ranges))
 
-  maintenance_window = (var.maintenance_window == null ? []:
-    [ { allowed     = (var.maintenance_window.allowed == null ? [] : var.maintenance_window.allowed)
-        not_allowed = (var.maintenance_window.not_allowed == null ? [] : var.maintenance_window.not_allowed) } ] )
+  maintenance_window = (var.maintenance_window == null ? [] : [{
+    allowed     = (var.maintenance_window.allowed == null ? [] : var.maintenance_window.allowed)
+    not_allowed = (var.maintenance_window.not_allowed == null ? [] : var.maintenance_window.not_allowed)
+  }])
 
   invalid_node_pool_attributes = join(",", flatten([for np in values(var.node_pools) : [for k, v in np : k if !(contains(keys(var.node_pool_defaults), k))]]))
   validate_node_pool_attributes = (length(local.invalid_node_pool_attributes) > 0 ?

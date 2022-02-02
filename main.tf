@@ -108,14 +108,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
       dynamic "allowed" {
         for_each = maintenance_window.value.allowed
         content {
-          day = allowed.value.day
+          day   = allowed.value.day
           hours = allowed.value.hours
         }
       }
       dynamic "not_allowed" {
         for_each = maintenance_window.value.not_allowed
         content {
-          end = not_allowed.value.end
+          end   = not_allowed.value.end
           start = not_allowed.value.start
         }
       }

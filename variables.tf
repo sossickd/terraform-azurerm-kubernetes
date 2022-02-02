@@ -283,8 +283,8 @@ variable "maintenance_window" {
       hours = list(number)
     }))
     not_allowed = list(object({
-     end = string
-     start = string
+      end   = string
+      start = string
     }))
   })
   default = null
