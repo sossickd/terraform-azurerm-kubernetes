@@ -277,33 +277,19 @@ variable "windows_profile" {
 
 
 variable "maintenance_window" {
-  type = object({
-    allowed = object({
-      day   = string
-      hours = list(number)
-    })
-    not_allowed = object({
-     start = string
-     end = string
-    })
-  })
-  default = null
+  type = list(object(any))
+  default = []
 
   validation {
-    condition = (
-      var.maintenance_window == null ? true :
-      ((var.maintenance_window.allowed == null) ? true :
-        (var.maintenance_window.allowed.day != null) &&
-        (var.maintenance_window.allowed.day != "") &&
-        (var.maintenance_window.allowed.hours != null) &&
-        (var.maintenance_window.allowed.hours != "") &&
-      ((var.maintenance_window.not_allowed == null) ? true :
-        (var.maintenance_window.not_allowed.start != null) &&
-        (var.maintenance_window.not_allowed.start != "") &&
-        (var.maintenance_window.not_allowed.end != null) &&
-      (var.maintenance_window.not_allowed.end != ""))
-    ))
-    error_message = "Windows profile requires both admin_username and admin_password."
+    condition = alltrue([
+      for window in var.maintenance_window : (
+        (can(window["allowed"]) ? (can(window.allowed["day"]) && type(window.allowed["day"]) == "string") : true) &&
+        (can(window["allowed"]) ? (can(window.allowed["hours"]) && type(window.allowed["day"]) == "list") : true) &&
+        (can(window["not_allowed"]) ? (can(window.not_allowed["start"]) && type(window.not_allowed["start"]) == "string") : true) &&
+        (can(window["not_allowed"]) ? (can(window.not_allowed["end"]) && type(window.not_allowed["end"]) == "string") : true)
+      )
+    ])
+    error_message = "Maintenence window is a list of objects containing allowed and not_allowed configurations."
   }
 }
 

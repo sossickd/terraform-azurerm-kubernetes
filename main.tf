@@ -103,24 +103,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   dynamic "maintenance_window" {
-      for_each = (var.maintenance_window == null ? [] : [1])
+      for_each = toset(var.maintenance_window)
       content {
-        dynamic "allowed" {
-          for_each = (lookup(var.maintenance_window, "allowed", null) == null ? [] : [1])
-          content {
-            day = var.maintenance_window.allowed.day
-            hours = var.maintenance_window.allowed.hours
-          }
-        }
-        dynamic "not_allowed" {
-          for_each = (lookup(var.maintenance_window, "not_allowed", null) == null ? [] : [1])
-          content {
-            end = var.maintenance_window.not_allowed.end
-            start = var.maintenance_window.not_allowed.start
-          }
-        }
+        allowed = lookup(maintenance_window.value, "allowed", null)
+        not_allowed = lookup(maintenance_window.value, "not_allowed", null)
       }
     }
+
   identity {
     type = var.identity_type
     user_assigned_identity_id = (var.identity_type == "SystemAssigned" ? null :
