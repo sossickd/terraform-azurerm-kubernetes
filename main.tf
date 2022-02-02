@@ -116,7 +116,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
         for_each = (lookup(maintenance_window.value, "not_allowed", null) == null ? [] : [lookup(maintenance_window.value, "not_allowed")])
         content {
           end   = not_allowed.value.end
-          start = not_allowed.vaulue.start
+          start = not_allowed.value.start
         }
       }
     }
