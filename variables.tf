@@ -297,12 +297,12 @@ variable "maintenance_window" {
         (var.maintenance_window.allowed.day != "") &&
         (var.maintenance_window.allowed.hours != null) &&
         (var.maintenance_window.allowed.hours != "") &&
-        (var.maintenance_window.not_allowed == null) ? true :
+      ((var.maintenance_window.not_allowed == null) ? true :
         (var.maintenance_window.not_allowed.start != null) &&
         (var.maintenance_window.not_allowed.start != "") &&
         (var.maintenance_window.not_allowed.end != null) &&
       (var.maintenance_window.not_allowed.end != ""))
-    )
+    ))
     error_message = "Windows profile requires both admin_username and admin_password."
   }
 }
