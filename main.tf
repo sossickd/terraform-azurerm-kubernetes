@@ -115,8 +115,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
         dynamic "not_allowed" {
           for_each = (lookup(var.maintenance_window, "not_allowed", null) == null ? [] : [1])
           content {
-            end = var.maintenance_window.not_allowed.day
-            start = var.maintenance_window.not_allowed.hours
+            end = var.maintenance_window.not_allowed.end
+            start = var.maintenance_window.not_allowed.start
           }
         }
       }
