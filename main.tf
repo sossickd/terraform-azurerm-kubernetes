@@ -108,15 +108,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
       dynamic "allowed" {
         for_each = (lookup(maintenance_window.value, "allowed", null) == null ? [] : [lookup(maintenance_window.value, "allowed")])
         content {
-          day   = allowed.day
-          hours = allowed.hours
+          day   = allowed.value.day
+          hours = allowed.value.hours
         }
       }
       dynamic "not_allowed" {
         for_each = (lookup(maintenance_window.value, "not_allowed", null) == null ? [] : [lookup(maintenance_window.value, "not_allowed")])
         content {
-          end   = not_allowed.end
-          start = not_allowed.start
+          end   = not_allowed.value.end
+          start = not_allowed.vaulue.start
         }
       }
     }
