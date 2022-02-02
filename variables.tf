@@ -277,14 +277,14 @@ variable "windows_profile" {
 
 
 variable "maintenance_window" {
-  type = list(object(any))
+  type = list(any)
   default = []
 
   validation {
     condition = alltrue([
       for window in var.maintenance_window : (
         (can(window["allowed"]) ? (can(window.allowed["day"]) && type(window.allowed["day"]) == "string") : true) &&
-        (can(window["allowed"]) ? (can(window.allowed["hours"]) && type(window.allowed["day"]) == "list") : true) &&
+        (can(window["allowed"]) ? (can(window.allowed["hours"]) && type(window.allowed["hours"]) == "list") : true) &&
         (can(window["not_allowed"]) ? (can(window.not_allowed["start"]) && type(window.not_allowed["start"]) == "string") : true) &&
         (can(window["not_allowed"]) ? (can(window.not_allowed["end"]) && type(window.not_allowed["end"]) == "string") : true)
       )
