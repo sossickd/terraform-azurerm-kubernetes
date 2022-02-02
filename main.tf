@@ -26,15 +26,15 @@ resource "azurerm_role_assignment" "route_table_network_contributor" {
 resource "azurerm_kubernetes_cluster" "aks" {
   depends_on = [azurerm_role_assignment.route_table_network_contributor]
 
-  name                      = local.cluster_name
-  location                  = var.location
-  resource_group_name       = var.resource_group_name
-  tags                      = var.tags
+  name                = local.cluster_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
 
-  sku_tier                  = var.sku_tier
-  kubernetes_version        = var.kubernetes_version
-  node_resource_group       = local.node_resource_group
-  dns_prefix                = local.dns_prefix
+  sku_tier            = var.sku_tier
+  kubernetes_version  = var.kubernetes_version
+  node_resource_group = local.node_resource_group
+  dns_prefix          = local.dns_prefix
 
   automatic_channel_upgrade = var.automatic_channel_upgrade
 
@@ -80,7 +80,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     kube_dashboard {
       enabled = var.enable_kube_dashboard
     }
-    
+
     azure_policy {
       enabled = var.enable_azure_policy
     }
@@ -103,24 +103,24 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   dynamic "maintenance_window" {
-      for_each = toset(var.maintenance_window)
-      content {
-        dynamic "allowed" {
-          for_each = (lookup(maintenance_window.value, "allowed", null) == null ? [] : [lookup(maintenance_window.value, "allowed")])
-          content {
-            day = allowed.day
-            hours = allowed.hours
-          }
+    for_each = toset(var.maintenance_window)
+    content {
+      dynamic "allowed" {
+        for_each = (lookup(maintenance_window.value, "allowed", null) == null ? [] : [lookup(maintenance_window.value, "allowed")])
+        content {
+          day   = allowed.day
+          hours = allowed.hours
         }
-        dynamic "not_allowed" {
-          for_each = (lookup(maintenance_window.value, "not_allowed", null) == null ? [] : [lookup(maintenance_window.value, "not_allowed")])
-          content {
-            end = not_allowed.end
-            start = not_allowed.start
-          }
+      }
+      dynamic "not_allowed" {
+        for_each = (lookup(maintenance_window.value, "not_allowed", null) == null ? [] : [lookup(maintenance_window.value, "not_allowed")])
+        content {
+          end   = not_allowed.end
+          start = not_allowed.start
         }
       }
     }
+  }
 
   identity {
     type = var.identity_type
@@ -154,22 +154,22 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
 
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
 
-  name                    = each.key
-  vm_size                 = each.value.vm_size
-  os_disk_size_gb         = each.value.os_disk_size_gb
-  os_disk_type            = each.value.os_disk_type
-  availability_zones      = each.value.availability_zones
-  enable_auto_scaling     = each.value.enable_auto_scaling
-  node_count              = (each.value.enable_auto_scaling ? null : each.value.node_count)
-  min_count               = (each.value.enable_auto_scaling ? each.value.min_count : null)
-  max_count               = (each.value.enable_auto_scaling ? each.value.max_count : null)
-  os_type                 = each.value.os_type
-  enable_host_encryption  = each.value.enable_host_encryption
-  enable_node_public_ip   = each.value.enable_node_public_ip
-  max_pods                = each.value.max_pods
-  node_labels             = each.value.node_labels
-  orchestrator_version    = each.value.orchestrator_version
-  tags                    = each.value.tags
+  name                   = each.key
+  vm_size                = each.value.vm_size
+  os_disk_size_gb        = each.value.os_disk_size_gb
+  os_disk_type           = each.value.os_disk_type
+  availability_zones     = each.value.availability_zones
+  enable_auto_scaling    = each.value.enable_auto_scaling
+  node_count             = (each.value.enable_auto_scaling ? null : each.value.node_count)
+  min_count              = (each.value.enable_auto_scaling ? each.value.min_count : null)
+  max_count              = (each.value.enable_auto_scaling ? each.value.max_count : null)
+  os_type                = each.value.os_type
+  enable_host_encryption = each.value.enable_host_encryption
+  enable_node_public_ip  = each.value.enable_node_public_ip
+  max_pods               = each.value.max_pods
+  node_labels            = each.value.node_labels
+  orchestrator_version   = each.value.orchestrator_version
+  tags                   = each.value.tags
   vnet_subnet_id = (each.value.subnet != null ?
   var.virtual_network.subnets[each.value.subnet].id : null)
 

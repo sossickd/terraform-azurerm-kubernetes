@@ -277,7 +277,7 @@ variable "windows_profile" {
 
 
 variable "maintenance_window" {
-  type = list(any)
+  type    = list(any)
   default = []
 
   validation {
@@ -334,8 +334,8 @@ variable "enable_azure_policy" {
 
 variable "api_server_authorized_ip_ranges" {
   description = "authorized IP ranges to communicate with K8s API"
-  type = map(string)
-  default = null
+  type        = map(string)
+  default     = null
 }
 
 variable "acr_pull_access" {
