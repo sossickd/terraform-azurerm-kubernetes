@@ -281,7 +281,7 @@ variable "maintenance_window" {
   default = []
 
   validation {
-    condition = alltrue(concat((length(var.maintenance_window) < 2 ? true : false), [
+    condition = alltrue(concat([(length(var.maintenance_window) < 2 ? true : false)], [
       for window in var.maintenance_window : (
         (can(window["allowed"]) ? can(window.allowed["day"]) : true) &&
         (can(window["allowed"]) ? can(window.allowed["hours"]) : true) &&
